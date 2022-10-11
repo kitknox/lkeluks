@@ -17,7 +17,7 @@ kubectl apply -f daemonset-lke-luks.yaml
 
 DaemonSet will :
 * Updated base Debian 11 packages
-* Changed TCP congestion control to BBR
+* Changes TCP congestion control to BBR
 * Increase eth0 NIC queue to max allowed
 * One node at a time drain, convert to LUKS, reboot, uncordon, and then wipe original in the clear disk.
 * Nodes are then labeled with luks=enabled allowing you to schedule work only on workers that have been secured.
