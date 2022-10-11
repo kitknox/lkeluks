@@ -3,7 +3,7 @@ Automatically convert LKE worker nodes into a LUKS encrypted root filesystem wit
 
 *Warning: This is an unofficial capability that is not currently a supported use case by Linode.  Use at your own risk*
 
-Node pool must be provisioned with a large secondary custom disk and the main boot disk at the minimum 15GB size.  This can only be provisioned usin the Linode API.  Example:
+Node pool must be provisioned with a large secondary "RAW" custom disk and the main boot disk at the minimum 15GB size.  This can only be provisioned usin the Linode API.  As this is a DaemonSet any recycled, manually scaled, or autoscaled nodes will get picked up and secured.  Example node pool creation via CLI :
 
 ```
 $ linode-cli lke pool-create --count 1 --type g6-standard-4 --disks '[{"size": 148840,"type": "raw"}]' <LKE_clusterID>
