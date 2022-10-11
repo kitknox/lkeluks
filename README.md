@@ -38,4 +38,4 @@ lke75642-117619-6345b62eca30   Ready    <none>   24m   v1.23.6   enabled
 lke75642-117619-6345b62eef86   Ready    <none>   23m   v1.23.6   enabled
 ```
 
-To change any of the behavior including the TANG server URL you must fork this repo, modify the setup script, and point the DaemonSet at the new URL with your customized version.
+To change any of the behavior including the TANG server URL you must fork this repo, modify the setup script, and point the DaemonSet at the new URL with your customized version.  For a production environment you would want to self-host a TANG server which only accepts requests from your LKE worker node IPs.
