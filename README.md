@@ -1,6 +1,8 @@
 # lkeluks
 Automatically convert LKE worker nodes into a LUKS encrypted root filesystem with Tang/Clevis Unlocking
 
+*Warning: This is an unofficial capability that is not currently a supported use case by Linode.  Use at your own risk*
+
 Node pool must be provisioned with a large secondary custom disk and the main boot disk at the minimum 15GB size.  This can only be provisioned usin the Linode API.  Example:
 
 ```
