@@ -1,0 +1,65 @@
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  namespace: kube-system
+  name: lke-luks
+  labels:
+    k8s-app: lke-luks
+spec:
+  selector:
+    matchLabels:
+      k8s-app: lke-luks
+  template:
+    metadata:
+      labels:
+        k8s-app: lke-luks
+    spec:
+      hostNetwork: true
+      initContainers:
+      - name: init-node
+        command:
+          - nsenter
+          - --mount=/proc/1/ns/mnt
+          - --
+          - bash
+          - -c
+          - |
+            export DEBIAN_FRONTEND=noninteractive
+            apt update -yq
+            apt install -yq joe htop
+            /usr/bin/unattended-upgrade -v
+            ethtool -L eth0 combined `ethtool -l eth0 | grep Combined | head -1 | awk '{print $2}'`
+            if ! grep "default_qdisc = fq" /etc/sysctl.conf; then   echo "qdisc not already set"; echo "net.core.default_qdisc = fq" >> /etc/sysctl.conf ; fi
+            if ! grep "net.ipv4.tcp_congestion_control = bbr" /etc/sysctl.conf; then   echo "BBR not already set"; echo "net.ipv4.tcp_congestion_control = bbr" >> /etc/sysctl.conf ; fi
+            sysctl -p /etc/sysctl.conf
+            curl https://raw.githubusercontent.com/kitknox/lkeluks/main/luks_setup.sh -o /usr/local/bin/luks_setup.sh
+            chmod +x /usr/local/bin/luks_setup.sh
+            cat > /etc/systemd/system/lke-luks.service << EOF
+            [Unit]
+            Description=Run once
+            After=local-fs.target
+            After=network.target
+            [Service]
+            ExecStart=/usr/local/bin/luks_setup.sh
+            RemainAfterExit=true
+            Type=oneshot
+            [Install]
+             WantedBy=multi-user.target
+            EOF
+            systemctl daemon-reload
+            systemctl start lke-luks
+        image: alpine
+        securityContext:
+          privileged: true
+      hostPID: true
+      containers:
+      - name: wait
+        image: k8s.gcr.io/pause:3.1
+      hostPID: true
+      hostNetwork: true
+      tolerations:
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/master
+  updateStrategy:
+    type: RollingUpdate
