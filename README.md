@@ -10,7 +10,7 @@ $ linode-cli lke pool-create --count 1 --type g6-standard-4 --disks '[{"size": 1
 To apply to your LKE cluster:
 
 ```
-kubectl apply -f daemonset-lks-luks.yaml
+kubectl apply -f daemonset-lke-luks.yaml
 ```
 
 DaemonSet will :
