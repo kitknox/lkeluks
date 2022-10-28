@@ -95,10 +95,10 @@ cat > /mnt/tmp/chroot.sh << EOFF
 export LUKS_KEY=$LUKS_KEY
 cat > /etc/fstab <<EOF
 /dev/mapper/secure	/	ext4	defaults	0	1
-/dev/sdb2	/boot	ext4	defaults 0 0
+UUID=`lsblk --nodeps --noheadings -o UUID /dev/sdb2`	/boot	ext4	defaults 0 0
 EOF
 cat > /etc/crypttab <<EOF
-secure	/dev/sdb3	none
+secure	UUID=`lsblk --nodeps --noheadings -o UUID /dev/sdb3`	none
 EOF
 update-grub
 grub-install /dev/sdb
