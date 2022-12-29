@@ -16,7 +16,7 @@ kubectl apply -f daemonset-lke-luks.yaml
 ```
 
 DaemonSet will :
-* Updated base Debian 11 packages
+* Update base Debian 11 packages
 * Changes TCP congestion control to BBR
 * Increase eth0 NIC queue to max allowed
 * One node at a time drain, convert to LUKS, reboot, uncordon, and then wipe original in the clear disk.
@@ -39,3 +39,5 @@ lke75642-117619-6345b62eef86   Ready    <none>   23m   v1.23.6   enabled
 ```
 
 To change any of the behavior including the TANG server URL you must fork this repo, modify the setup script, and point the DaemonSet at the new URL with your customized version.  For a production environment you would want to self-host a TANG server which only accepts requests from your LKE worker node IPs.
+
+Tested up through LKE with Kubernetes 1.24.
