@@ -130,6 +130,8 @@ $LINODE_API_TOKEN
 1
 1
 1
+1
+1
 EOF
 rm ~/.config/linode-cli
 linode-cli < cli_setup.txt > /dev/null
